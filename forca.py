@@ -29,7 +29,6 @@ def main():
             andamento(palavra, letras_usadas)
             chances -= 1
             print(f'Você ainda tem {chances} vidas!')
-            print('o.o')
 
 
 def andamento(palavra, usadas):
