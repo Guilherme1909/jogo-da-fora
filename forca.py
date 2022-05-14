@@ -1,4 +1,5 @@
 from random import randint
+from os import system
 
 
 def main():
@@ -10,7 +11,11 @@ def main():
     chances = 10
     ganhou = False
 
-    print(palavra)
+    for l in palavra:
+        print('_', end=' ')
+    print()
+
+    # tratamento de erros
     while chances != 0 and ganhou is False:
         letra = input('Digite uma letra: ').upper()
         if len(letra) > 1 or letra.isnumeric() is True:
@@ -19,34 +24,37 @@ def main():
         elif letra in letras_usadas:
             print('Você já usou esta letra!')
             continue
-
-        clear()
+        
+        # jogo
+        system('cls')
         letras_usadas.append(letra)
         if letra_correta(palavra, letra) is True:
-            ganhou = andamento(palavra, letras_usadas)
+            print(f'A letra "{letra}" está correta!')
+            ganhou = jogada(palavra, letras_usadas)
         else:
-            print(f'A letra {letra} não pertece à palavra.')
-            andamento(palavra, letras_usadas)
+            print(f'A letra "{letra}" não pertece à palavra.')
+            jogada(palavra, letras_usadas)
             chances -= 1
-            print(f'Você ainda tem {chances} vidas!')
+            if chances > 0:
+                if chances == 1:
+                    print(f'Você só tem mais uma vida!')
+                else:
+                    print(f'Você ainda tem {chances} vidas!')
+            else:
+                print(f'Suas chances acabaram! A palavra era "{palavra}".')
 
 
-def andamento(palavra, usadas):
-    certa = []
-
-    for l in range(0, len(palavra)):
-        certa.append(' ')
-        for c in range(0, len(usadas)):
-            if palavra[l] == usadas[c]:
-                certa[l] = usadas[c]
-    print()
-
-    for i in range(0, len(certa)):
-        print(f'{certa[i]}', end=' ')
-    print()
-
-    for i in range(0, len(palavra)):
-        print('-', end=' ')
+# compara a letra e printa a situação
+def jogada(palavra, usadas):
+    temp = ''
+    for letra_ in palavra:
+        if letra_ in usadas:
+            temp += letra_
+        else:
+            temp += '_'
+    
+    for l in temp:
+        print(l, end=' ')
     print()
 
     print('Letras usadas:')
@@ -54,17 +62,14 @@ def andamento(palavra, usadas):
         print(f'{x}', end=' ')
     print('\n')
 
-    p = ''
-    c = ''
-    for o in range(0, len(palavra)):
-        p += palavra[o]
-        c += certa[o]
-        if p[o] != c[o]:
-            return False
-    print(f'PARABÉNS! VOCÊ ACERTOU A PALAVRA "{palavra}".')
-    return True
+    if temp == palavra:
+        print(f'PARABÉNS! VOCÊ ACERTOU A PALAVRA "{palavra}".')
+        return True
+    else:
+        return False
 
 
+# retorna True se a letra for compativel
 def letra_correta(palavra, letra):
     certa = False
     for l in range(0, len(palavra)):
@@ -72,11 +77,6 @@ def letra_correta(palavra, letra):
             certa = True
             break
     return certa
-
-
-def clear():
-    for x in range(20):
-        print()
 
 
 main()
